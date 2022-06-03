@@ -78,6 +78,7 @@ const MenuButton = ({
       style={style}
       inactiveOpacity={theme.bar.inActiveOpacity!}
       onClick={onClick}
+      ariaLabel={item.label}
       label={icon ?? (
         <Fragment>
           <span
@@ -86,14 +87,12 @@ const MenuButton = ({
               textDecoration
             }}
             aria-hidden="true"
-            tabIndex={-1}
           >
             {label.first}
           </span>
           <span
             className={styles.MenuButtonLabel}
             aria-hidden="true"
-            tabIndex={-1}
           >
             {label.rest}
           </span>

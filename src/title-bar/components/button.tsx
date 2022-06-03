@@ -39,6 +39,7 @@ const getOpacity = (disabled: boolean, focused: boolean, inActiveOpacity: number
 
 interface ButtonProps {
   label: React.ReactNode;
+  ariaLabel?: string;
   children: React.ReactNode;
   open: boolean;
   focused: boolean;
@@ -58,6 +59,7 @@ const Button = ({
   onOverlayClick,
   theme,
   label,
+  ariaLabel,
   children,
   open,
   inactiveOpacity,
@@ -95,9 +97,25 @@ const Button = ({
         ...(style ?? {}),
         backgroundColor
       }}
-      tabIndex={0}
-      aria-haspopup
     >
+      <div className={styles.MenuButtonWrapper}>
+        <button
+          className={styles.MenuButton}
+          ref={hoverRef}
+          style={{
+            color,
+            maxWidth: theme.maxWidth
+          }}
+          onClick={onClick}
+          tabIndex={0}
+          aria-haspopup
+          aria-label={ariaLabel}
+        >
+          <div className={styles.MenuButtonLabelWrapper} style={{ opacity, maxWidth: theme.maxWidth }}>
+            {label}
+          </div>
+        </button>
+      </div>
       {
         open && !hideOverlay && (
           <Overlay
@@ -108,21 +126,6 @@ const Button = ({
       {
         open && children
       }
-      <div className={styles.MenuButtonWrapper}>
-        <button
-          className={styles.MenuButton}
-          ref={hoverRef}
-          style={{
-            color,
-            maxWidth: theme.maxWidth
-          }}
-          onClick={onClick}
-        >
-          <div className={styles.MenuButtonLabelWrapper} style={{ opacity, maxWidth: theme.maxWidth }}>
-            {label}
-          </div>
-        </button>
-      </div>
     </div>
   )
 }

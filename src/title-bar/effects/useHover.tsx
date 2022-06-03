@@ -17,9 +17,13 @@ export default function useHover<T extends HTMLElement>(): [React.RefObject<T>, 
 
       node.addEventListener('mouseenter', enter);
       node.addEventListener('mouseleave', leave);
+      node.addEventListener('focus', enter);
+      node.addEventListener('blur', leave);
       return () => {
         node.removeEventListener('mouseenter', enter);
         node.removeEventListener('mouseleave', leave);
+        node.removeEventListener('focus', enter);
+        node.removeEventListener('blur', leave);
       };
     }
     return

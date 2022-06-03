@@ -105,6 +105,7 @@ const MenuItemComponent = ({
         backgroundColor
       }}
       role="option"
+      tabIndex={0}
       onClick={onClick}
     >
       <a
