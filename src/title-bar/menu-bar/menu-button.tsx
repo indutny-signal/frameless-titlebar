@@ -7,22 +7,16 @@ import React, {
 } from 'react';
 import { ThemeContext } from '../theme';
 import MenuList from './menu-list';
-import { currentSelected, isItemSubMenu } from '../utils';
+import { currentSelected, isItemSubMenu, splitLabel, SplitLabel } from '../utils';
 import styles from '../style.css';
 import { MenuButtonProps, FullMenuBottonProps, MenuButtonTheme } from '../typings';
 import Button from '../components/button';
 
-const useAltLabel = (l?: string): { first?: string, rest?: string } => {
-  const [label, setLabel] = useState({
-    first: l?.slice(0, 1),
-    rest: l?.slice(1)
-  });
+const useAltLabel = (l?: string): SplitLabel => {
+  const [label, setLabel] = useState(splitLabel(l));
 
   useEffect(() => {
-    setLabel({
-      first: l?.slice(0, 1),
-      rest: l?.slice(1)
-    });
+    setLabel(splitLabel(l));
   }, [l]);
 
   return label;
@@ -78,9 +72,15 @@ const MenuButton = ({
       style={style}
       inactiveOpacity={theme.bar.inActiveOpacity!}
       onClick={onClick}
-      ariaLabel={item.label}
+      ariaLabel={item.label?.replace('&', '')}
       label={icon ?? (
         <Fragment>
+          <span
+            className={styles.MenuButtonLabel}
+            aria-hidden="true"
+          >
+            {label.before}
+          </span>
           <span
             className={styles.MenuButtonLabel}
             style={{
@@ -88,13 +88,13 @@ const MenuButton = ({
             }}
             aria-hidden="true"
           >
-            {label.first}
+            {label.letter}
           </span>
           <span
             className={styles.MenuButtonLabel}
             aria-hidden="true"
           >
-            {label.rest}
+            {label.after}
           </span>
         </Fragment>
       )}

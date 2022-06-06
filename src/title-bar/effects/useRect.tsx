@@ -32,20 +32,14 @@ export default function useRect<T extends HTMLElement>(
 
     handleResize();
 
-    // @ts-ignore
-    if (typeof ResizeObserver === "function") {
-      // @ts-ignore
-      let resizeObserver = new ResizeObserver(() => handleResize());
-      resizeObserver.observe(element);
-      return () => {
-        if (!resizeObserver) return;
-        resizeObserver.disconnect();
-        resizeObserver = null;
-      };
-    } else {
-      window.addEventListener("resize", handleResize); // Browser support, remove freely
-      return () => window.removeEventListener("resize", handleResize);
-    }
+    let resizeObserver: ResizeObserver | undefined =
+      new ResizeObserver(() => handleResize());
+    resizeObserver.observe(element);
+    return () => {
+      if (!resizeObserver) return;
+      resizeObserver.disconnect();
+      resizeObserver = undefined;
+    };
   }, [ref.current]);
 
   return rect;

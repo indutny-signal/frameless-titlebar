@@ -129,3 +129,35 @@ export const getValidItem = (menu: MenuItem[], selected: number[], prev: boolean
 export const immutableSplice = <T>(arr: T[], start: number, deleteCount: number, ...items: T[]): T[] => {
   return [...arr.slice(0, start), ...items, ...arr.slice(start + deleteCount)];
 };
+
+export type SplitLabel = Readonly<{
+  before?: string;
+  letter?: string;
+  after?: string;
+}>;
+
+const LABEL_CACHE = new Map<string, SplitLabel>();
+
+export const splitLabel = (l?: string): SplitLabel => {
+  if (l === undefined) {
+    return {};
+  }
+
+  const cached = LABEL_CACHE.get(l);
+  if (cached) {
+    return cached;
+  }
+
+  const letters = [...l];
+  const index = l.indexOf('&');
+
+  const result = {
+    before: letters.slice(0, Math.max(0, index)).join(''),
+    letter: letters[index + 1],
+    after: letters.slice(index + 2).join(''),
+  };
+
+  LABEL_CACHE.set(l, result);
+
+  return result;
+};

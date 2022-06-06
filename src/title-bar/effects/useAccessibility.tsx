@@ -6,12 +6,14 @@ import {
   validNext,
   getCurrentRef,
   menuItemClick,
-  validPrevious
+  validPrevious,
+  splitLabel,
 } from '../utils';
 import { MenuItem, OverflowState } from '../typings';
 
 const altKeyCodeMatch = (e: any, str?: string) => {
-  return !!e.altKey && e.keyCode === str?.charCodeAt(0);
+  const { letter } = splitLabel(str);
+  return !!e.altKey && e.key === letter;
 };
 
 const depth = 0;
