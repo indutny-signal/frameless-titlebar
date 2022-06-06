@@ -13,7 +13,7 @@ import { MenuItem, OverflowState } from '../typings';
 
 const altKeyCodeMatch = (e: any, str?: string) => {
   const { letter } = splitLabel(str);
-  return !!e.altKey && e.key === letter;
+  return !!e.altKey && e.key === letter?.toLowerCase();
 };
 
 const depth = 0;
