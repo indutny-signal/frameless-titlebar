@@ -5,6 +5,9 @@
   "author": "Cristian006",
   "license": "MIT",
   "repository": "Cristian006/frameless-titlebar",
+  "files": [
+    "dist"
+  ],
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "jsnext:main": "dist/index.es.js",
