@@ -25,7 +25,7 @@ export default {
     }
   ],
   plugins: [
-    postcss({ modules: true }),
+    postcss({ extract: 'dist/styles.css', modules: true }),
     strip(),
     external(),
     url({ exclude: ['**/*.svg'] }),
