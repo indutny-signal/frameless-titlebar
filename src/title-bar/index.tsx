@@ -15,6 +15,7 @@ const TitleBar = ({
   onMaximize,
   onClose,
   onDoubleClick,
+  className,
   disableMaximize,
   disableMinimize,
   disableControls,
@@ -40,7 +41,7 @@ const TitleBar = ({
   return (
     <ThemeContext.Provider value={currentTheme}>
       <Fragment>
-        <Bar onDoubleClick={onDoubleClick}>
+        <Bar onDoubleClick={onDoubleClick} className={className}>
           <div className={cx(styles.ResizeHandle, styles.Top)} />
           <div className={cx(styles.ResizeHandle, styles.Left)} style={{ height: theme?.bar?.height }} />
           {!isDarwin && !disableControls && !controlsRight && (

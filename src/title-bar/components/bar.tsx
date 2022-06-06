@@ -2,11 +2,13 @@ import React, { useContext, useRef, useCallback } from 'react';
 import { ThemeContext } from '../theme';
 import styles from '../style.css';
 import { BarProps } from '../typings';
+import cx from 'classnames';
 
 const Bar = ({
   onDoubleClick,
   children,
-  bottomBar
+  bottomBar,
+  className,
 }: BarProps) => {
   const {
     platform,
@@ -30,7 +32,7 @@ const Bar = ({
   const isDarwin = platform === 'darwin';
   return (
     <div
-      className={styles.Bar}
+      className={cx(styles.Bar, className)}
       ref={ref}
       style={{
         padding: isDarwin ? '0 70px' : 0,

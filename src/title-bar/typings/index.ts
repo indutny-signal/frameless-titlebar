@@ -36,6 +36,7 @@ export interface TitleBarProps extends ControlProps {
   menu?: MenuItem[];
   theme?: TitleBarTheme;
   icon?: React.ReactNode;
+  className?: string;
   iconSrc?: string;
   title?: string;
   currentWindow?: object;
@@ -244,6 +245,7 @@ export interface BarProps {
   onDoubleClick?: (e: React.MouseEvent) => void;
   children: React.ReactNode | React.ReactNodeArray;
   bottomBar?: boolean;
+  className?: string;
 }
 
 export interface WindowButtonProps {
