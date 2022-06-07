@@ -31,7 +31,8 @@ const WindowControls = ({
   maximized,
   disableMinimize,
   disableMaximize,
-  focused
+  focused,
+  hideControls,
 }: WindowControlsProps) => {
   const {
     platform,
@@ -41,6 +42,24 @@ const WindowControls = ({
   const isWin = platform === 'win32';
   const itemWidth = isWin ? 48 : 40;
   const width = itemWidth * (3 - (disableMaximize ? 1 : 0) - (disableMinimize ? 1 : 0));
+
+  const children =
+    buttons(isWin, maximized ?? false, onMinimize!, onMaximize!, onClose!)
+      .filter(x => !(disableMaximize && x.type == 'maximize' || disableMinimize && x.type == 'minimize'))
+      .map((b) => {
+        return (
+          <WindowButton
+            key={b.type}
+            platform={platform}
+            close={b.type === 'close'}
+            onClick={b.onClick}
+            controls={controls as Required<ControlsTheme>}
+          >
+            {b.icon}
+          </WindowButton>
+        )
+      });
+
   return (
     <div
       className={styles.ControlsWrapper}
@@ -49,23 +68,7 @@ const WindowControls = ({
         width
       }}
     >
-      {
-        buttons(isWin, maximized ?? false, onMinimize!, onMaximize!, onClose!)
-          .filter(x => !(disableMaximize && x.type == 'maximize' || disableMinimize && x.type == 'minimize'))
-          .map((b) => {
-            return (
-              <WindowButton
-                key={b.type}
-                platform={platform}
-                close={b.type === 'close'}
-                onClick={b.onClick}
-                controls={controls as Required<ControlsTheme>}
-              >
-                {b.icon}
-              </WindowButton>
-            )
-          })
-      }
+      {hideControls ? null : children}
     </div>
   );
 };

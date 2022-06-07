@@ -21,7 +21,7 @@ export interface ControlProps {
   onClose?: () => void;
   disableMaximize?: boolean;
   disableMinimize?: boolean;
-  disableControls?: boolean;
+  hideControls?: boolean;
   maximized?: boolean;
 }
 

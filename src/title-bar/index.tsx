@@ -18,7 +18,7 @@ const TitleBar = ({
   className,
   disableMaximize,
   disableMinimize,
-  disableControls,
+  hideControls,
   platform,
   children,
   theme,
@@ -44,8 +44,9 @@ const TitleBar = ({
         <Bar onDoubleClick={onDoubleClick} className={className}>
           <div className={cx(styles.ResizeHandle, styles.Top)} />
           <div className={cx(styles.ResizeHandle, styles.Left)} style={{ height: theme?.bar?.height }} />
-          {!isDarwin && !disableControls && !controlsRight && (
+          {!isDarwin && !controlsRight && (
             <WindowControls
+              hideControls={hideControls}
               focused={focused}
               disableMaximize={disableMaximize}
               disableMinimize={disableMinimize}
@@ -76,8 +77,9 @@ const TitleBar = ({
             {title}
           </Title>
           {children}
-          {!isDarwin && !disableControls && controlsRight && (
+          {!isDarwin && controlsRight && (
             <WindowControls
+              hideControls={hideControls}
               focused={focused}
               disableMaximize={disableMaximize}
               disableMinimize={disableMinimize}
