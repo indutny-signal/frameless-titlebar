@@ -39,6 +39,14 @@ const menuReducer = (state: MenuState, action: MenuAction): MenuState => {
     }
     case 'button-set':
     case 'hover-sub': {
+      // when clicking already opened menu - close it
+      if (state.selectedPath[action.depth] === action.selected) {
+        return {
+          ...state,
+          selectedPath: [...state.selectedPath.slice(0, action.depth), -1],
+        };
+      }
+
       // when hovering over a sub menu add -1 for the sub menu
       return {
         ...state,
