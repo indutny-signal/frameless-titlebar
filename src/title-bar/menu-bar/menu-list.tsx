@@ -40,8 +40,8 @@ const MenuList = ({
       className={styles.MenuListContainer}
       style={{
         color: theme.menu.item!.default!.color,
-        top: layout.top,
-        left: layout.left,
+        top: theme.scalingFunction(layout.top),
+        left: theme.scalingFunction(layout.left),
         zIndex: theme.menu.list!.zIndex!,
         background: theme.menu.list!.background,
         boxShadow: theme.menu.list!.boxShadow

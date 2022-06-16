@@ -250,6 +250,16 @@ const mergeTheme = (overrides?: TitleBarTheme, platform: Platform = 'win32'): Re
   } else {
     theme['menu'] = getMenuTheme(paletteType, menuStyle)
   }
+  if (overrides?.enableOverflow !== undefined) {
+    theme['enableOverflow'] = overrides.enableOverflow;
+  } else {
+    theme['enableOverflow'] = true;
+  }
+  if (overrides?.scalingFunction) {
+    theme['scalingFunction'] = overrides.scalingFunction;
+  } else {
+    theme['scalingFunction'] = x => x;
+  }
   return theme as Required<TitleBarTheme>;
 };
 

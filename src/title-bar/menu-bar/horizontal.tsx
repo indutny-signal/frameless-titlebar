@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useReducer, useState, Fragment } from 'react';
+import React, { useContext, useEffect, useRef, useReducer, useState, Fragment } from 'react';
 
 import MenuButton from './menu-button';
 import {
@@ -10,6 +10,7 @@ import {
 } from '../effects';
 import { immutableSplice } from '../utils';
 import reducer, { initialState } from './reducer';
+import { ThemeContext } from '../theme';
 import { HorizontalMenuProps, MenuItem } from '../typings';
 
 const overflowItem = (menu?: MenuItem[]): MenuItem => {
@@ -21,9 +22,10 @@ const overflowItem = (menu?: MenuItem[]): MenuItem => {
 
 const depth = 0;
 const HorizontalMenu = ({ menu, focused, currentWindow, menuBar }: HorizontalMenuProps) => {
+  const theme = useContext(ThemeContext);
   const overflowRef = useRef<HTMLDivElement>(null);
   const childRefs = useChildRefs<HTMLDivElement>(menu);
-  const overflow = useOverflow(menu, menuBar, childRefs, overflowRef);
+  const overflow = useOverflow(menu, menuBar, childRefs, overflowRef, theme.enableOverflow);
   const [fixedMenu, updateFixedMenu] = useState(
     immutableSplice(menu, overflow.index, 0, overflowItem(overflow.menu))
   );

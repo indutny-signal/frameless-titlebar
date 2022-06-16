@@ -6,7 +6,8 @@ const calcMenuOverflow = (
   menu: MenuItem[],
   menuBar: React.RefObject<HTMLElement>,
   refs: React.RefObject<HTMLElement>[],
-  overflowRef?: React.RefObject<HTMLElement>
+  overflowRef?: React.RefObject<HTMLElement>,
+  isEnabled = true,
 ): OverflowState => {
   const [overflow, setOverflow] = useState<OverflowState>({
     menu: [],
@@ -17,7 +18,7 @@ const calcMenuOverflow = (
   const menuBarRect = useRect(menuBar);
 
   useEffect(() => {
-    const availableSize = menuBarRect.width;
+    const availableSize = isEnabled ? menuBarRect.width : Infinity;
     let currentSize = 0;
     let full = false;
     const prevMenusShown = activeMenus.current;

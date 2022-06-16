@@ -158,6 +158,8 @@ export interface TitleBarTheme {
   bar?: BarTheme;
   controls?: ControlsTheme;
   menu?: MenuTheme;
+  enableOverflow?: boolean;
+  scalingFunction?: (value: string) => string;
 }
 
 export interface MenuBarProps {
