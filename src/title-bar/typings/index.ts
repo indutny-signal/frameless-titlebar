@@ -150,6 +150,7 @@ export interface MenuTheme {
   list?: ListTheme;
   overlay?: OverlayTheme;
   marginRight?: number;
+  autoHide?: boolean;
 }
 
 
@@ -165,6 +166,7 @@ export interface TitleBarTheme {
 export interface MenuBarProps {
   menu?: MenuItem[];
   focused: boolean;
+  hovering: boolean;
   currentWindow?: object;
 }
 
@@ -183,12 +185,14 @@ export interface HorizontalMenuProps {
   focused: boolean;
   menuBar: React.RefObject<HTMLElement>;
   currentWindow?: object;
+  onOpen?: (open: boolean) => void;
 }
 
 export interface VerticalMenuProps {
   menu: MenuItem[];
   focused: boolean;
   currentWindow?: object;
+  onOpen?: (open: boolean) => void;
 }
 
 export interface OverflowState {
@@ -245,6 +249,7 @@ export interface TitleProps {
 
 export interface BarProps {
   onDoubleClick?: (e: React.MouseEvent) => void;
+  onHover?: (hovering: boolean) => void;
   children: React.ReactNode | React.ReactNodeArray;
   bottomBar?: boolean;
   className?: string;

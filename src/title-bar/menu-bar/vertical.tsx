@@ -19,12 +19,13 @@ const menuButton = (menu: MenuItem[]): MenuItem => {
 };
 
 const depth = 0;
-const VerticalMenu = ({ menu, focused, currentWindow }: VerticalMenuProps) => {
+const VerticalMenu = ({ menu, focused, currentWindow, onOpen }: VerticalMenuProps) => {
   const [fixedMenu, updateFixedMenu] = useState<MenuItem[]>([menuButton(menu)]);
   const childRefs = useChildRefs<HTMLDivElement>(fixedMenu);
   const width = useWidth();
   const prevWidth = usePrevious(width);
   const [{ selectedPath }, dispatch] = useReducer(reducer, initialState);
+  const isOpen = selectedPath[depth] >= 0;
 
   useEffect(() => {
     // close menu when focused away from window
@@ -37,6 +38,10 @@ const VerticalMenu = ({ menu, focused, currentWindow }: VerticalMenuProps) => {
   useEffect(() => {
     updateFixedMenu([menuButton(menu)]);
   }, [menu]);
+
+  useEffect(() => {
+    onOpen?.(isOpen);
+  }, [isOpen, onOpen]);
 
   useAccessibility(
     fixedMenu,

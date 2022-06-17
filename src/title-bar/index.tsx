@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState, useCallback } from 'react';
 import cx from 'classnames';
 import WindowControls from './window-controls';
 import MenuBar from './menu-bar';
@@ -31,6 +31,7 @@ const TitleBar = ({
 }: TitleBarProps) => {
   const focused = useWindowFocus();
   const currentTheme = useTheme(theme, platform);
+  const [hovering, setHovering] = useState(false);
   const isDarwin = platform === 'darwin';
   const stacked = currentTheme?.menu?.style === 'stacked';
   const vertical = currentTheme?.menu?.style === 'vertical';
@@ -38,10 +39,13 @@ const TitleBar = ({
   const hasIcon = !!icon || !!iconSrc;
   const hasMenu = !isDarwin && ((menu?.length ?? 0) > 0);
   const hasTitle = !!(title && title !== '');
+  const onHover = useCallback((hovering: boolean) => {
+    setHovering(hovering);
+  }, [setHovering]);
   return (
     <ThemeContext.Provider value={currentTheme}>
       <Fragment>
-        <Bar onDoubleClick={onDoubleClick} className={className}>
+        <Bar onDoubleClick={onDoubleClick} className={className} onHover={onHover}>
           <div className={cx(styles.ResizeHandle, styles.Top)} />
           <div className={cx(styles.ResizeHandle, styles.Left)} style={{ height: theme?.bar?.height }} />
           {!isDarwin && !controlsRight && (
@@ -64,6 +68,7 @@ const TitleBar = ({
               focused={focused}
               menu={menu}
               currentWindow={currentWindow}
+              hovering={hovering}
             />
           )}
           {
@@ -98,6 +103,7 @@ const TitleBar = ({
                 focused={focused}
                 menu={menu}
                 currentWindow={currentWindow}
+                hovering={hovering}
               />
             }
           </Bar>

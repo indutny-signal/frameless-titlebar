@@ -1,11 +1,13 @@
-import React, { useContext, useRef, useCallback } from 'react';
+import React, { useContext, useCallback, useEffect } from 'react';
 import { ThemeContext } from '../theme';
 import styles from '../style.css';
 import { BarProps } from '../typings';
+import { useHover } from '../effects';
 import cx from 'classnames';
 
 const Bar = ({
   onDoubleClick,
+  onHover,
   children,
   bottomBar,
   className,
@@ -23,12 +25,15 @@ const Bar = ({
       style,
     }
   } = useContext(ThemeContext);
-  const ref = useRef(null);
+  const [ref, hovering] = useHover<HTMLDivElement>();
   const dblClick = useCallback((e) => {
-    if (e.target == ref.current) {
+    if (e.target === ref.current) {
       onDoubleClick && onDoubleClick(e);
     }
-  }, [ref.current, onDoubleClick])
+  }, [ref.current, onDoubleClick]);
+  useEffect(() => {
+    onHover?.(hovering);
+  }, [hovering, onHover]);
   const isDarwin = platform === 'darwin';
   return (
     <div
