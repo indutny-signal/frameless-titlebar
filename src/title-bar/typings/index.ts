@@ -166,7 +166,6 @@ export interface TitleBarTheme {
 export interface MenuBarProps {
   menu?: MenuItem[];
   focused: boolean;
-  hovering: boolean;
   currentWindow?: object;
 }
 
@@ -186,6 +185,7 @@ export interface HorizontalMenuProps {
   menuBar: React.RefObject<HTMLElement>;
   currentWindow?: object;
   onOpen?: (open: boolean) => void;
+  onButtonHover?: (hovering: boolean) => void;
 }
 
 export interface VerticalMenuProps {
@@ -193,6 +193,7 @@ export interface VerticalMenuProps {
   focused: boolean;
   currentWindow?: object;
   onOpen?: (open: boolean) => void;
+  onButtonHover?: (hovering: boolean) => void;
 }
 
 export interface OverflowState {
@@ -249,7 +250,6 @@ export interface TitleProps {
 
 export interface BarProps {
   onDoubleClick?: (e: React.MouseEvent) => void;
-  onHover?: (hovering: boolean) => void;
   children: React.ReactNode | React.ReactNodeArray;
   bottomBar?: boolean;
   className?: string;

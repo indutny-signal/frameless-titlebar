@@ -6,7 +6,7 @@ import { useMenu } from '../effects';
 import styles from '../style.css';
 import { MenuBarProps } from '../typings';
 
-const MenuBar = ({ menu, focused, hovering, currentWindow }: MenuBarProps) => {
+const MenuBar = ({ menu, focused, currentWindow }: MenuBarProps) => {
   const {
     platform,
     menu: {
@@ -17,9 +17,13 @@ const MenuBar = ({ menu, focused, hovering, currentWindow }: MenuBarProps) => {
   const menuBar = useRef<HTMLDivElement>(null);
   const currentMenu = useMenu(platform, menu);
   const [open, setOpen] = useState(false);
+  const [hovering, setHovering] = useState(false);
   const onOpen = useCallback((open) => {
     setOpen(open);
   }, [setOpen]);
+  const onButtonHover = useCallback((hovering) => {
+    setHovering(hovering);
+  }, [setHovering]);
 
   return (
     <div
@@ -34,6 +38,7 @@ const MenuBar = ({ menu, focused, hovering, currentWindow }: MenuBarProps) => {
           focused={focused}
           currentWindow={currentWindow}
           onOpen={onOpen}
+          onButtonHover={onButtonHover}
         />
       )
         : (
@@ -43,6 +48,7 @@ const MenuBar = ({ menu, focused, hovering, currentWindow }: MenuBarProps) => {
             focused={focused}
             currentWindow={currentWindow}
             onOpen={onOpen}
+            onButtonHover={onButtonHover}
           />
         )}
     </div>

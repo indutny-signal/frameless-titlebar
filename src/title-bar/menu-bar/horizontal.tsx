@@ -21,7 +21,7 @@ const overflowItem = (menu?: MenuItem[]): MenuItem => {
 };
 
 const depth = 0;
-const HorizontalMenu = ({ menu, focused, currentWindow, menuBar, onOpen }: HorizontalMenuProps) => {
+const HorizontalMenu = ({ menu, focused, currentWindow, menuBar, onOpen, onButtonHover }: HorizontalMenuProps) => {
   const theme = useContext(ThemeContext);
   const overflowRef = useRef<HTMLDivElement>(null);
   const childRefs = useChildRefs<HTMLDivElement>(menu);
@@ -31,7 +31,7 @@ const HorizontalMenu = ({ menu, focused, currentWindow, menuBar, onOpen }: Horiz
   );
   const width = useWidth();
   const prevWidth = usePrevious(width);
-  const [{ selectedPath, altKey }, dispatch] = useReducer(reducer, initialState);
+  const [{ selectedPath, altKey, hovering }, dispatch] = useReducer(reducer, initialState);
   const isOpen = selectedPath[depth] >= 0;
 
   useEffect(() => {
@@ -51,6 +51,10 @@ const HorizontalMenu = ({ menu, focused, currentWindow, menuBar, onOpen }: Horiz
   useEffect(() => {
     onOpen?.(isOpen);
   }, [isOpen, onOpen]);
+
+  useEffect(() => {
+    onButtonHover?.(hovering);
+  }, [hovering, onButtonHover]);
 
   useAccessibility(
     fixedMenu,
