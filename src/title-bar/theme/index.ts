@@ -57,6 +57,7 @@ const menuTheme = {
       marginBottom: 10,
       background: 'rgb(48, 48, 48)',
       boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
+      borderRadius: 'unset',
       zIndex: 2001,
     },
     overlay: <OverlayTheme>{

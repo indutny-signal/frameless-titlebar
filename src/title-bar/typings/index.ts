@@ -128,6 +128,7 @@ export interface ListTheme {
   marginBottom?: number;
   background?: string;
   boxShadow?: string;
+  borderRadius?: string;
   zIndex?: number;
 }
 

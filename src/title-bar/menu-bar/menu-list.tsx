@@ -44,7 +44,8 @@ const MenuList = ({
         left: theme.scalingFunction(layout.left),
         zIndex: theme.menu.list!.zIndex!,
         background: theme.menu.list!.background,
-        boxShadow: theme.menu.list!.boxShadow
+        boxShadow: theme.menu.list!.boxShadow,
+        borderRadius: theme.menu.list!.borderRadius
       }}
       ref={menuRef}
     >
