@@ -21,7 +21,7 @@ const menuButton = (menu: MenuItem[]): MenuItem => {
 const depth = 0;
 const VerticalMenu = ({ menu, focused, currentWindow, onOpen, onButtonHover }: VerticalMenuProps) => {
   const [fixedMenu, updateFixedMenu] = useState<MenuItem[]>([menuButton(menu)]);
-  const childRefs = useChildRefs<HTMLDivElement>(fixedMenu);
+  const childRefs = useChildRefs<HTMLButtonElement>(fixedMenu);
   const width = useWidth();
   const prevWidth = usePrevious(width);
   const [{ selectedPath, hovering }, dispatch] = useReducer(reducer, initialState);
@@ -52,7 +52,6 @@ const VerticalMenu = ({ menu, focused, currentWindow, onOpen, onButtonHover }: V
     childRefs,
     selectedPath,
     dispatch,
-    false,
     undefined,
     undefined,
     currentWindow,

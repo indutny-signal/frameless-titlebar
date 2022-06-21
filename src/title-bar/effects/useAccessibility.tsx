@@ -22,7 +22,6 @@ const useAccessibility = (
   childRefs: React.RefObject<HTMLElement>[],
   selectedPath: number[],
   dispatch: any,
-  altKey: boolean,
   overflowRef?: React.RefObject<HTMLElement>,
   overflow?: OverflowState,
   currentWindow?: object,
@@ -34,16 +33,15 @@ const useAccessibility = (
     });
   }, [dispatch]);
 
-  const callback = useCallback(e => {
+  const onKeyDown = useCallback(e => {
     if (e.altKey) {
-      if (!altKey) {
-        dispatch({
-          type: 'alt',
-          altKey: true
-        });
-      }
+      dispatch({
+        type: 'alt',
+        altKey: true
+      });
+
       // if the keycode is not alt
-      if (e.keyCode !== 18) {
+      if (e.key !== 'Alt') {
         let firstIndex = menu!.findIndex(x => (!x.disabled && altKeyCodeMatch(e, x.label)));
         if (firstIndex >= 0) {
           // only prevent default when alt key code match is found
@@ -61,8 +59,8 @@ const useAccessibility = (
 
     const current = selectedPath[depth];
     if (current < 0) return;
-    switch (e.keyCode) {
-      case 13 /* enter */: {
+    switch (e.key) {
+      case 'Enter': {
         e.preventDefault();
         e.stopImmediatePropagation();
         const [selectedItem, selectedIndex, selectedMenu] = getSelectedItem(
@@ -87,7 +85,7 @@ const useAccessibility = (
         );
         break;
       }
-      case 27 /* esc */: {
+      case 'Escape': {
         e.preventDefault();
         const currRef = getCurrentRef(
           childRefs,
@@ -99,7 +97,7 @@ const useAccessibility = (
         dispatch({ type: 'reset' });
         break;
       }
-      case 40 /* down */: {
+      case 'ArrowDown': {
         e.preventDefault();
         const [next, selectedDepth] = getValidItem(menu, selectedPath);
         dispatch({
@@ -109,7 +107,7 @@ const useAccessibility = (
         });
         break;
       }
-      case 39 /* right */: {
+      case 'ArrowRight': {
         e.preventDefault();
         const [selectedItem] = getSelectedItem(menu, selectedPath);
         if (isItemSubMenu(selectedItem)) {
@@ -124,7 +122,7 @@ const useAccessibility = (
         dispatch({ type: 'button-set', depth, selected: next });
         break;
       }
-      case 38 /* up */: {
+      case 'ArrowUp': {
         e.preventDefault();
         const [prev, selectedDepth] = getValidItem(menu, selectedPath, true);
         dispatch({
@@ -134,7 +132,7 @@ const useAccessibility = (
         });
         break;
       }
-      case 37 /* left */:
+      case 'ArrowLeft': {
         e.preventDefault();
         if (selectedPath.length <= 2) {
           const prev = validPrevious(menu, current, overflow && overflow.hide ? menu.length - 1 : overflow!.index + 1);
@@ -143,6 +141,7 @@ const useAccessibility = (
         }
         dispatch({ type: 'del', depth: selectedPath.length - 1 });
         break;
+      }
       default:
           /* do nothing */ break;
     }
@@ -159,13 +158,13 @@ const useAccessibility = (
   );
 
   useEffect(() => {
-    window.addEventListener('keydown', callback);
+    window.addEventListener('keydown', onKeyDown);
     window.addEventListener('keyup', resetKeys);
     return () => {
-      window.removeEventListener('keydown', callback);
-      window.addEventListener('keyup', resetKeys);
+      window.removeEventListener('keydown', onKeyDown);
+      window.removeEventListener('keyup', resetKeys);
     };
-  }, [callback, resetKeys]);
+  }, [onKeyDown, resetKeys]);
 };
 
 export default useAccessibility;

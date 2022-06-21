@@ -1,5 +1,5 @@
 import useChildRefs from './useChildRefs';
-import useHover from './useHover';
+import useHover, { useHoverWithRef } from './useHover';
 import useMenu from './useMenu';
 import usePrevious from './usePrevious';
 import useRect from './useRect';
@@ -15,6 +15,7 @@ import useClickAway from './useClickAway';
 export {
   useChildRefs,
   useHover,
+  useHoverWithRef,
   useMenu,
   usePrevious,
   useRect,

@@ -23,8 +23,8 @@ const overflowItem = (menu?: MenuItem[]): MenuItem => {
 const depth = 0;
 const HorizontalMenu = ({ menu, focused, currentWindow, menuBar, onOpen, onButtonHover }: HorizontalMenuProps) => {
   const theme = useContext(ThemeContext);
-  const overflowRef = useRef<HTMLDivElement>(null);
-  const childRefs = useChildRefs<HTMLDivElement>(menu);
+  const overflowRef = useRef<HTMLButtonElement>(null);
+  const childRefs = useChildRefs<HTMLButtonElement>(menu);
   const overflow = useOverflow(menu, menuBar, childRefs, overflowRef, theme.enableOverflow);
   const [fixedMenu, updateFixedMenu] = useState(
     immutableSplice(menu, overflow.index, 0, overflowItem(overflow.menu))
@@ -53,15 +53,41 @@ const HorizontalMenu = ({ menu, focused, currentWindow, menuBar, onOpen, onButto
   }, [isOpen, onOpen]);
 
   useEffect(() => {
-    onButtonHover?.(hovering);
-  }, [hovering, onButtonHover]);
+    onButtonHover?.(hovering || altKey);
+  }, [hovering, altKey, onButtonHover]);
+
+  // Pressing "Alt" should focus the first button
+  useEffect(() => {
+    let isJustAlt = true;
+    const onKeyDown = (e: KeyboardEvent): void => {
+      if (e.altKey) {
+        isJustAlt = isJustAlt && e.key === 'Alt';
+      }
+    };
+    const onKeyUp = (e: KeyboardEvent): void => {
+      if (e.key !== 'Alt') {
+        return;
+      }
+      if (isJustAlt) {
+        // Focus the first button
+        childRefs[0]?.current?.focus();
+      }
+
+      isJustAlt = true;
+    };
+    window.addEventListener('keydown', onKeyDown);
+    window.addEventListener('keyup', onKeyUp);
+    return () => {
+      window.removeEventListener('keydown', onKeyDown);
+      window.removeEventListener('keyup', onKeyUp);
+    };
+  }, [childRefs[0]?.current, dispatch]);
 
   useAccessibility(
     fixedMenu,
     childRefs,
     selectedPath,
     dispatch,
-    altKey,
     overflowRef,
     overflow,
     currentWindow

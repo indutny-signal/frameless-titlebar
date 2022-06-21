@@ -1,9 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 
-export default function useHover<T extends HTMLElement>(): [React.RefObject<T>, boolean] {
-  // Reference to the element we're listen for events from
-  const ref = useRef<T>(null);
-
+export function useHoverWithRef<T extends HTMLElement>(ref: React.RefObject<T>): boolean {
   // Hover state management
   const [hovered, setHovered] = useState(false);
 
@@ -29,5 +26,12 @@ export default function useHover<T extends HTMLElement>(): [React.RefObject<T>, 
     return
   }, [ref.current]);
 
-  return [ref, hovered];
+  return hovered;
+}
+
+export default function useHover<T extends HTMLElement>(): [React.RefObject<T>, boolean] {
+  // Reference to the element we're listen for events from
+  const ref = useRef<T>(null);
+
+  return [ref, useHoverWithRef(ref)];
 }

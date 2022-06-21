@@ -239,7 +239,7 @@ export interface MenuButtonProps {
 }
 
 export interface FullMenuBottonProps extends MenuButtonProps {
-  myRef: React.RefObject<HTMLDivElement>;
+  myRef: React.RefObject<HTMLButtonElement>;
 }
 
 export interface TitleProps {

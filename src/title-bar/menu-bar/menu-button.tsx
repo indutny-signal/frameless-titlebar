@@ -115,6 +115,6 @@ const MenuButton = ({
   );
 };
 
-export default React.forwardRef<HTMLDivElement, MenuButtonProps>((props, ref) => {
-  return <MenuButton {...props} myRef={ref as React.RefObject<HTMLDivElement>} />
+export default React.forwardRef<HTMLButtonElement, MenuButtonProps>((props, ref) => {
+  return <MenuButton {...props} myRef={ref as React.RefObject<HTMLButtonElement>} />
 });

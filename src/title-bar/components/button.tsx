@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { useRect, useHover, useClickAway } from '../effects';
+import { useRect, useHoverWithRef, useClickAway } from '../effects';
 import Overlay from './overlay';
 import { MenuButtonTheme } from '../typings';
 import styles from '../style.css';
@@ -43,7 +43,7 @@ interface ButtonProps {
   children: React.ReactNode;
   open: boolean;
   focused: boolean;
-  myRef?: React.RefObject<HTMLDivElement>;
+  myRef?: React.RefObject<HTMLButtonElement>;
   onOverlayClick: () => void;
   onClick: (e: React.MouseEvent) => void;
   onHover?: (hovering: boolean) => void;
@@ -72,9 +72,9 @@ const Button = ({
 }: ButtonProps) => {
   myRef = myRef ?? useRef(null);
   const bounds = useRect(myRef);
-  const [hoverRef, hovering] = useHover<HTMLButtonElement>();
+  const hovering = useHoverWithRef(myRef);
 
-  useClickAway(hoverRef, () => {
+  useClickAway(myRef, () => {
     if (open) {
       onOverlayClick();
     }
@@ -84,7 +84,6 @@ const Button = ({
     onHover && onHover(hovering);
   }, [hovering]);
 
-
   const backgroundColor = getBackgroundColor(disabled, open, hovering, theme);
   const color = getColor(disabled, open, theme);
   const opacity = getOpacity(disabled, focused, inactiveOpacity, theme);
@@ -92,7 +91,6 @@ const Button = ({
   return (
     <div
       className={styles.MenuButtonContainer}
-      ref={myRef}
       style={{
         ...(style ?? {}),
         backgroundColor
@@ -101,7 +99,7 @@ const Button = ({
       <div className={styles.MenuButtonWrapper}>
         <button
           className={styles.MenuButton}
-          ref={hoverRef}
+          ref={myRef}
           style={{
             color,
             maxWidth: theme.maxWidth
@@ -130,6 +128,6 @@ const Button = ({
   )
 }
 
-export default React.forwardRef<HTMLDivElement, ButtonProps>((props, ref) => {
-  return <Button {...props} myRef={ref as React.RefObject<HTMLDivElement>} />
+export default React.forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
+  return <Button {...props} myRef={ref as React.RefObject<HTMLButtonElement>} />
 });
