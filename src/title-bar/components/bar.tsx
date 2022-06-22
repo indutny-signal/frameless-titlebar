@@ -35,12 +35,15 @@ const Bar = ({
       className={cx(styles.Bar, className)}
       ref={ref}
       style={{
-        padding: isDarwin ? '0 70px' : 0,
         borderBottom: (style === 'stacked' && !bottomBar) ? '' : borderBottom,
         background,
         color,
         height,
         fontFamily,
+        ...(isDarwin ? {
+          paddingLeft: '70px',
+          paddingRight: '70px',
+        } : {}),
       }}
       onDoubleClick={dblClick}
     >
