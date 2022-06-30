@@ -59,17 +59,20 @@ const HorizontalMenu = ({ menu, focused, currentWindow, menuBar, onOpen, onButto
   // Pressing "Alt" should focus the first button
   useEffect(() => {
     let isJustAlt = true;
+    let keysPressed = 0;
     const onKeyDown = (e: KeyboardEvent): void => {
-      if (e.altKey) {
-        isJustAlt = isJustAlt && e.key === 'Alt' && !e.shiftKey && !e.ctrlKey &&
-          !e.metaKey;
-      }
+      keysPressed += 1;
+
+      isJustAlt = isJustAlt && keysPressed === 1 && e.key === 'Alt';
     };
     const onKeyUp = (e: KeyboardEvent): void => {
-      if (e.key !== 'Alt') {
+      keysPressed = Math.max(0, keysPressed - 1);
+
+      if (keysPressed !== 0) {
         return;
       }
-      if (isJustAlt) {
+
+      if (e.key === 'Alt' && isJustAlt) {
         // Focus the first button
         childRefs[0]?.current?.focus();
       }
