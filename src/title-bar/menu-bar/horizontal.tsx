@@ -66,18 +66,16 @@ const HorizontalMenu = ({ menu, focused, currentWindow, menuBar, onOpen, onButto
       isJustAlt = isJustAlt && keysPressed === 1 && e.key === 'Alt';
     };
     const onKeyUp = (e: KeyboardEvent): void => {
+      if (keysPressed === 1) {
+        if (e.key === 'Alt' && isJustAlt) {
+          // Focus the first button
+          childRefs[0]?.current?.focus();
+        }
+
+        isJustAlt = true;
+      }
+
       keysPressed = Math.max(0, keysPressed - 1);
-
-      if (keysPressed !== 0) {
-        return;
-      }
-
-      if (e.key === 'Alt' && isJustAlt) {
-        // Focus the first button
-        childRefs[0]?.current?.focus();
-      }
-
-      isJustAlt = true;
     };
     window.addEventListener('keydown', onKeyDown);
     window.addEventListener('keyup', onKeyUp);
