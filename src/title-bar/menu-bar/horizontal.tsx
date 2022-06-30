@@ -61,7 +61,8 @@ const HorizontalMenu = ({ menu, focused, currentWindow, menuBar, onOpen, onButto
     let isJustAlt = true;
     const onKeyDown = (e: KeyboardEvent): void => {
       if (e.altKey) {
-        isJustAlt = isJustAlt && e.key === 'Alt';
+        isJustAlt = isJustAlt && e.key === 'Alt' && !e.shiftKey && !e.ctrlKey &&
+          !e.metaKey;
       }
     };
     const onKeyUp = (e: KeyboardEvent): void => {
