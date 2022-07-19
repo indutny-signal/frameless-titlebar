@@ -58,30 +58,60 @@ const HorizontalMenu = ({ menu, focused, currentWindow, menuBar, onOpen, onButto
 
   // Pressing "Alt" should focus the first button
   useEffect(() => {
-    let isJustAlt = true;
+    let isSingleKeyPressed = true;
     let keysPressed = 0;
+    let lastActive: HTMLElement | null = null;
+
+    const restoreFocus = (): boolean => {
+      if (document.activeElement !== childRefs[0]?.current) {
+        return false;
+      }
+
+      childRefs[0]?.current?.blur();
+      lastActive?.focus();
+      lastActive = null;
+      return true;
+    };
+
     const onKeyDown = (e: KeyboardEvent): void => {
       keysPressed += 1;
 
-      isJustAlt = isJustAlt && keysPressed === 1 && e.key === 'Alt';
+      isSingleKeyPressed = isSingleKeyPressed && keysPressed === 1;
+
+      if (isSingleKeyPressed && e.key === 'Escape') {
+        restoreFocus();
+      }
     };
     const onKeyUp = (e: KeyboardEvent): void => {
-      if (keysPressed === 1) {
-        if (e.key === 'Alt' && isJustAlt) {
-          // Focus the first button
-          childRefs[0]?.current?.focus();
-        }
+      const isLastKeyReleased = keysPressed === 1;
+      keysPressed = Math.max(0, keysPressed - 1);
 
-        isJustAlt = true;
+      if (!isLastKeyReleased) {
+        return;
       }
 
-      keysPressed = Math.max(0, keysPressed - 1);
+      // More than one key was pressed, reset.
+      if (!isSingleKeyPressed) {
+        isSingleKeyPressed = true;
+        return;
+      }
+
+      if (e.key === 'Alt') {
+        if (restoreFocus()) {
+          return;
+        }
+
+        // Focus the first button
+        lastActive = document.activeElement as (HTMLElement | null);
+        childRefs[0]?.current?.focus();
+        return;
+      }
     };
-    window.addEventListener('keydown', onKeyDown);
-    window.addEventListener('keyup', onKeyUp);
+    window.addEventListener('keydown', onKeyDown, true);
+    window.addEventListener('keyup', onKeyUp, true);
     return () => {
-      window.removeEventListener('keydown', onKeyDown);
-      window.removeEventListener('keyup', onKeyUp);
+      window.removeEventListener('keydown', onKeyDown, true);
+      window.removeEventListener('keyup', onKeyUp, true);
     };
   }, [childRefs[0]?.current, dispatch]);
 
