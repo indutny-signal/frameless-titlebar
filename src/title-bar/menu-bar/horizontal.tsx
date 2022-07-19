@@ -58,30 +58,63 @@ const HorizontalMenu = ({ menu, focused, currentWindow, menuBar, onOpen, onButto
 
   // Pressing "Alt" should focus the first button
   useEffect(() => {
-    let isJustAlt = true;
+    let isSingleKeyPressed = true;
     let keysPressed = 0;
-    const onKeyDown = (e: KeyboardEvent): void => {
-      keysPressed += 1;
+    let lastActive: HTMLElement | null = null;
 
-      isJustAlt = isJustAlt && keysPressed === 1 && e.key === 'Alt';
-    };
-    const onKeyUp = (e: KeyboardEvent): void => {
-      if (keysPressed === 1) {
-        if (e.key === 'Alt' && isJustAlt) {
-          // Focus the first button
-          childRefs[0]?.current?.focus();
-        }
-
-        isJustAlt = true;
+    const restoreFocus = (): boolean => {
+      if (document.activeElement !== childRefs[0]?.current) {
+        return false;
       }
 
-      keysPressed = Math.max(0, keysPressed - 1);
+      childRefs[0]?.current?.blur();
+      lastActive?.focus();
+      lastActive = null;
+      return true;
     };
-    window.addEventListener('keydown', onKeyDown);
-    window.addEventListener('keyup', onKeyUp);
+
+    const onKeyDown = (): void => {
+      keysPressed += 1;
+
+      isSingleKeyPressed = isSingleKeyPressed && keysPressed === 1;
+    };
+    const onKeyUp = (e: KeyboardEvent): void => {
+      const isLastKeyReleased = keysPressed === 1;
+      keysPressed = Math.max(0, keysPressed - 1);
+
+      if (!isLastKeyReleased) {
+        return;
+      }
+
+      // More than one key was pressed, reset.
+      if (!isSingleKeyPressed) {
+        isSingleKeyPressed = true;
+        return;
+      }
+
+      if (e.key === 'Escape') {
+        restoreFocus();
+        return;
+      }
+
+      if (e.key === 'Alt') {
+        if (restoreFocus()) {
+          return;
+        }
+
+        // Focus the first button
+        lastActive = document.activeElement as (HTMLElement | null);
+        childRefs[0]?.current?.focus();
+        return;
+      }
+    };
+
+    const useCapture = true;
+    window.addEventListener('keydown', onKeyDown, useCapture);
+    window.addEventListener('keyup', onKeyUp, useCapture);
     return () => {
-      window.removeEventListener('keydown', onKeyDown);
-      window.removeEventListener('keyup', onKeyUp);
+      window.removeEventListener('keydown', onKeyDown, useCapture);
+      window.removeEventListener('keyup', onKeyUp, useCapture);
     };
   }, [childRefs[0]?.current, dispatch]);
 
