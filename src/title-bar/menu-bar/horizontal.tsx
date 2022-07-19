@@ -73,14 +73,10 @@ const HorizontalMenu = ({ menu, focused, currentWindow, menuBar, onOpen, onButto
       return true;
     };
 
-    const onKeyDown = (e: KeyboardEvent): void => {
+    const onKeyDown = (): void => {
       keysPressed += 1;
 
       isSingleKeyPressed = isSingleKeyPressed && keysPressed === 1;
-
-      if (isSingleKeyPressed && e.key === 'Escape') {
-        restoreFocus();
-      }
     };
     const onKeyUp = (e: KeyboardEvent): void => {
       const isLastKeyReleased = keysPressed === 1;
@@ -96,6 +92,11 @@ const HorizontalMenu = ({ menu, focused, currentWindow, menuBar, onOpen, onButto
         return;
       }
 
+      if (e.key === 'Escape') {
+        restoreFocus();
+        return;
+      }
+
       if (e.key === 'Alt') {
         if (restoreFocus()) {
           return;
@@ -107,11 +108,13 @@ const HorizontalMenu = ({ menu, focused, currentWindow, menuBar, onOpen, onButto
         return;
       }
     };
-    window.addEventListener('keydown', onKeyDown, true);
-    window.addEventListener('keyup', onKeyUp, true);
+
+    const useCapture = true;
+    window.addEventListener('keydown', onKeyDown, useCapture);
+    window.addEventListener('keyup', onKeyUp, useCapture);
     return () => {
-      window.removeEventListener('keydown', onKeyDown, true);
-      window.removeEventListener('keyup', onKeyUp, true);
+      window.removeEventListener('keydown', onKeyDown, useCapture);
+      window.removeEventListener('keyup', onKeyUp, useCapture);
     };
   }, [childRefs[0]?.current, dispatch]);
 
