@@ -14,7 +14,8 @@ const getTopOffset = (depth: number, hasSubLabel: boolean): number => {
 const useLayoutBounds = (bounds: RectResult, depth: number, hasSubLabel: boolean): { top: string, left: string } => {
   const [layout, setLayout] = useState({
     top: `${bounds.bottom - getTopOffset(depth, hasSubLabel)}px`,
-    left: `${bounds.left}px`
+    left: window.innerWidth >= bounds.right + 200 ?
+      `${bounds.left}px` : `${bounds}.right}px`,
   });
   useLayoutEffect(() => {
     if (depth > 1) {
